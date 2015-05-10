@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<style type="text/css">
+/*initialization*/
+html, body, div, span,    
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,   
+a, abbr, acronym, address, big, cite, code,   
+img, ins, kbd, q, s, samp,   
+small, strike, strong,    
+dl, dt, dd, ol, ul, li,   
+fieldset, form, label, legend,   
+table, caption, tbody, tfoot, thead, tr, th, td {   
+    margin: 0;   
+    padding: 0;   
+    border: 0;   
+    outline: 0;   
+    /*font-size: 100%; */  
+    vertical-align: baseline;   
+    background: transparent;   
+}   
+body {
+	line-height: 1;
+	text-align:left;
+}   
+ol, ul {   
+    list-style: none;   
+}   
+blockquote, q {   
+    quotes: none;   
+}   
+blockquote:before, blockquote:after,   
+q:before, q:after {   
+    content: '';   
+    content: none;   
+}   
+   
+table {   
+    border-collapse: collapse;   
+    border-spacing: 0;   
+}  
+
+/*initial finished*/
+  /*#body{
+	  text-align:center;
+	  background:url(img/update.png) repeat !important;
+  }*/
+  #wrapper { 
+     width:1000px; 
+     margin:0 auto;
+	 text-align:left;
+  }
+  #header{
+	  background-color:#DFDFDF;
+	  height:90px;
+  }
+  #headwrap{
+	  width:1000px;
+	  text-align:left;
+	  margin:0 auto;
+	  height:90px;
+  }
+  #logo{
+	  margin-left:5px;
+  }
+  #footer { 
+     background:url(./img/shadow.png) repeat;
+     width:1000px; 
+     margin:0 auto;
+	 text-align:center;
+  }
+  #wrap{
+	  background-color:#F7F7F7;
+	  margin-top:0px;
+  }
+  #mainframe h3{
+	  margin:0px 0 0 20px;
+  }
+  #mainframe{
+	  text-align:left;
+  }
+  #shoutbox{
+	  width:640px;
+	  height:240px;
+	  overflow:hidden;
+	  font-size:18px;
+	  margin:0;
+	  margin-left:20px;
+	  font-family:"Comic Sans MS", cursive;
+	  padding:0px;
+  }
+  #sidebar{
+	width:300px;
+	position:relative;
+	top:-240px;
+	left:700px;
+  }
+  #sidebar p{
+	font-size:22px;
+	  margin-top:0.3em;
+	font-family:"黑体";
+  }
+  #sidebar p img{
+	vertical-align:-25%;
+    
+  }
+  #footleft{
+	  float:left;
+	  width:250px;
+	  text-align:left;
+	  padding:10px;
+  }
+  #footright{
+	  float:right;
+	  width:250px;
+	  text-align:right;
+	  padding:10px;
+  }
+  #foottop{
+	  width:900px;
+	  text-align:center;
+  }
+  #footmiddle{
+	  text-align:center;
+	  text-indent:0px;
+	  padding:10px 20px 10px 20px;
+	  margin-left:260px;
+	  width:340px;
+  }
+  .column p{
+	  margin:0px;
+  }
+</style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="js/jquery.js">
+</script>
+<script type="text/javascript" src="js/json.js"></script>
+<script type="text/javascript">
+    var lastid;  
+	var state=0;       //state:0 means pending loading; 1 means user input;
+	                   //state0: image=POST  state1: image=SUBMIT
+	jQuery(document).ready(function(){		
+		getid();
+		refresh();
+	}); 
+	function getid()
+	{
+		jQuery.ajax({	          
+		type: "get",
+		url: "http://localhost/shuo/lib/getid.php",
+		dataType: 'text',
+		async: false,
+		contentType: 'application/json; charset=utf8',
+		success: function(text){
+		  lastid=Number(text);
+		  alert(lastid);
+		}
+		});
+	}
+	function refresh()
+	{
+		getnum=Math.floor(Math.random()*(lastid+1));
+		jQuery.ajax({	          
+		type: "get",
+		url: "http://localhost/shuo/lib/getquery.php?id="+getnum,
+		dataType: 'json',
+		async: false,
+		contentType: 'application/json; charset=utf8',
+		success: function(json){
+		  alert(json[0].updates);
+		  document.getElementById("shoutbox").value=json[0].updates;
+		}
+		});
+	}
+	function postclick()
+	{
+		 if(state==0)
+		 {
+			 state=1;
+			 document.getElementById("shoutbox").value="";
+		}
+		 else
+		 {
+			 shout=document.getElementById("shoutbox").value;
+			 /*jQuery.post("http://localhost/shuo/lib/addquery.php",{id:lastid+1,updates:shout},"text",function(result){
+				 alert(result);
+			 });
+			 getid();*/
+			 $("h2").html("Over.");
+			 $.ajax({
+				 type:'POST',
+				 url:"http://localhost/shuo/lib/addquery.php",
+				 data:{id:lastid+1,updates:shout},
+				 success:function(data){
+					 alert(data);
+					 getid()
+				 }
+			 });
+		 }
+	}
+	function refreshclick()
+	//有时间要做成异步导入，导入图片，结束后取消图片，否则浏览器会小小的卡一下。
+	{
+		state=0;
+		refresh();
+	}
+    function checkchange()
+	{
+		if(1+1==2)
+		  countwords();
+	}
+	function countwords()
+	{
+		var txt=document.getElementById("shoutbox").value.length;
+		var remain=140-txt;
+		document.getElementById("remaining").innerHTML=remain;
+	}
+</script>
+<title>这是一个测试站点</title>
+</head>
+
+<body>
+  
+  <div id="header">
+  <div id="headwrap">
+    
+    <del style="float:right;margin-top:72px;font-size:12px;">你想对世界，说点什么？</del>
+    <img src="img/logo.png" alt="" id="logo" />
+  </div>  
+  </div>
+  <div id="wrap">
+  <div id="wrapper">
+  <div id="mainframe">
+    <br/>
+    <h3>开始你的吼吼之旅吧！在屏幕的右侧进行操作即可。</h3>
+    <br/>
+    <textarea id="shoutbox" onkeydown="checkchange();" onchange="checkchange();">
+</textarea>
+    <div id="sidebar">
+    <div id="statuses">
+      <p><img src="img/icons/black/refresh.png" alt="" name="refresh" width="40" height="40" id="refresh" onclick="refreshclick();" /> 刷新（或者按S键）</p>
+      <p><img src="img/icons/black/edit.png" alt="" width="40" height="40"  id="post" onclick="postclick();"  /> 发布（或者按P键）</p>
+      <div id="scores">
+        <a href="javascript:alert(0)" id="remaining" >140</a>
+        <br/>
+        <a href="" id="rating">AJAX Rating</a>
+      </div>
+      
+    </div>
+    <div id="rating">
+    </div>
+   </div> 
+  </div>
+  </div>
+  </div>
+  <div id="footer" class="column">
+  <div id="foottop">
+  <div id="footleft">
+  <h3>常用功能</h3>
+  <a href="">登陆？</a><br/>
+  <a href="">查看历史存档？</a><br/>
+  <a href="">查看已有的标签？</a><br/>
+  <a href="">还是....</a>
+  <u>我恋爱了
+你们别怪我⋯⋯以下是原文：
+
+"这是一个地雷帖。凡是踩到地雷的都给我再发一个这种帖去。看了的就别想偷着不写 你中招了~ 别想跑。。 我这里有来访记录的，如果不写，11年rp大降。。。自己想去吧，有对象的准散，有家属的准离，有钱的准漏财。规则：地雷贴的题目必须从以下几个选项中选择。
+a.我想我真的爱上你了。。
+b.我失恋了
+c.你怎么可以这么对我
+d.我发现了XXX的一个秘密= =
+e.我想我真的是同性恋。。。
+f.我恋爱了"
+明天考QP啊！伤不起RP啊！
+</u>
+  </div>
+  <div id="footright" class="column">
+    <p>right word</p>
+    <i>我恋爱了
+你们别怪我⋯⋯以下是原文：
+
+"这是一个地雷帖。凡是踩到地雷的都给我再发一个这种帖去。看了的就别想偷着不写 你中招了~ 别想跑。。 我这里有来访记录的，如果不写，11年rp大降。。。自己想去吧，有对象的准散，有家属的准离，有钱的准漏财。规则：地雷贴的题目必须从以下几个选项中选择。
+a.我想我真的爱上你了。。
+b.我失恋了
+c.你怎么可以这么对我
+d.我发现了XXX的一个秘密= =
+e.我想我真的是同性恋。。。
+f.我恋爱了"
+明天考QP啊！伤不起RP啊！
+</i>
+  </div>
+  <div id="footmiddle" class="column">
+    <p>middle word</p>
+<b>我恋爱了
+你们别怪我⋯⋯以下是原文：
+
+"这是一个地雷帖。凡是踩到地雷的都给我再发一个这种帖去。看了的就别想偷着不写 你中招了~ 别想跑。。 我这里有来访记录的，如果不写，11年rp大降。。。自己想去吧，有对象的准散，有家属的准离，有钱的准漏财。规则：地雷贴的题目必须从以下几个选项中选择。
+a.我想我真的爱上你了。。
+b.我失恋了
+c.你怎么可以这么对我
+d.我发现了XXX的一个秘密= =
+e.我想我真的是同性恋。。。
+f.我恋爱了"
+明天考QP啊！伤不起RP啊！
+</b>
+  </div>
+  </div>
+  
+</div>
+
+</body>
+</html>

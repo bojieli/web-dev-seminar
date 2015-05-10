@@ -1,0 +1,615 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jQuery in  Action</title>
+<style type="text/css">
+html, body, div, span,    
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,   
+a, abbr, acronym, address, big, cite, code,   
+img, ins, kbd, q, s, samp,   
+small, strike, strong,    
+dl, dt, dd, ol, ul, li,   
+fieldset, form, label, legend,   
+table, caption, tbody, tfoot, thead, tr, th, td {   
+    margin: 0;   
+    padding: 0;   
+    border: 0;   
+    outline: 0;   
+    /*font-size: 100%; */  
+    vertical-align: baseline;   
+    background: transparent;   
+}   
+body {
+	line-height: 1;
+	text-align:left;
+}   
+ol, ul {   
+    list-style: none;   
+}   
+blockquote, q {   
+    quotes: none;   
+}   
+blockquote:before, blockquote:after,   
+q:before, q:after {   
+    content: '';   
+    content: none;   
+}   
+   
+table {   
+    border-collapse: collapse;   
+    border-spacing: 0;   
+}  
+/*Inilaization finished */
+blockquote{
+	margin-left:25px;
+	margin-top:5px;
+}
+	#leftbar{
+		position:fixed;
+		left:0px;
+		top:0px;
+		width:15%;
+		height:100%;
+		background-color:#CFC;
+		/*border-right:3px solid;*/
+	}
+	#leftbar p{
+		margin-left:15px;
+		text-decoration:underline;
+		marin-top:0.3em;
+	}
+	#contents{
+		padding:10px;
+		float:right;
+		width:83%;
+	}
+	#cssbox{
+	  height:200px;
+	  width:200px;
+	  margin:10px;
+	  padding:5px;
+	  border:3px solid;
+	  background-image:url(img/logo2.jpg);
+	  color:white;
+  }
+  #ajaxbox{
+	  height:200px;
+	  width:200px;
+	  margin:10px;
+	  padding:5px;
+	  border:3px dashed;
+	  color:black;
+  }
+  body p{
+	  font-family:"Segoe UI",Tahoma, Geneva, sans-serif,  "wqy-microhei";
+	  font-size:18px;
+	  margin-top:0.2em;
+  }
+  body blockquote{
+	   font-family:"Segoe UI",Tahoma, Geneva, sans-serif,  "wqy-microhei";
+	   font-size:18px;
+  }
+  body h1,h3{
+	  font-family:“wqy-microhei”,"微软雅黑";
+  }
+</style>
+<script src="js/jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$("table tr:nth-child(even) ").addClass("test");
+</script>
+</head>
+
+<body>
+<div id="wrapper" style="height:100%">
+<div id="leftbar">
+	<img id="logo" src="img/logo.png"/ width=200 height=90 />
+    <p> <a href="#chapter0">第0章：序章</a></p>
+    <p><a href="#chapter1">第1章：选择器</a></p>
+    <p><a href="#chapter2">第2章：DOM</a></p>
+    <p><a href="#chapter3">第3章：事件</a></p>
+    <p><a href="#chapter4">第4章：动画</a></p>
+    <p><a href="#chapter5">第5章：Ajax</a></p>
+    <p><a href="">第6章：插件</a></p>
+</div>
+<div id="contents">
+<div id="Chapter0">
+<h1>序章</h1>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<h3>操作中引出的一些思考</h3>
+<p>&nbsp;</p>
+<p>我们经常在写JS代码的时候出现一些这样或者那样的情况，比如：</p>
+<blockquote>
+  <p>	 选择一些元素；</p>
+  <p>对选择的元素修改其HTML；</p>
+  <p>修改元素的响应事件；</p>
+  <p>隐藏或者显示元素；</p>
+  <p>给元素增加CSS类；</p>
+  <p>给元素增加一个动画；</p>
+  <p>或者将元素的内容传递到服务器。</p>
+  <p>&nbsp;</p>
+</blockquote>
+<p>我们先想一下这些问题该怎么分而治之？</p>
+<blockquote>
+  <p>选择元素我们可以使用选择器；</p>
+  <p>修改HTML，响应事件以及CSS等操作可以使用JS的DOM对象操作；</p>
+  <p>动画呢？我们应该使用Timeout配合CSS进行；</p>
+  <p>Ajax就是XMLHTTPRequest。</p>
+</blockquote>
+<p>&nbsp;</p>
+<p>然而，这些问题存在：</p>
+<blockquote>
+  <p>	选择器如果想选择奇数/偶数元素（比如制作斑马图怎么办？</p>
+  <p>DOM对象经常要使用一系列很长的控制字串来解决；</p>
+  <p>动画对于位移的还好说，如果是存在浏览器兼容性怎么办？</p>
+  <p>Ajax也存在浏览器兼容性，而且难以理解。</p>
+</blockquote>
+<p>&nbsp;</p>
+<p>我们该怎么办？</p>
+<p>&nbsp;</p>
+<h3>什么是jQuery</h3>
+<p>&nbsp;</p>
+<p> jQuery就是为了解决这些问题而生。</p>
+<p>例如我们想为下面的Table做一个斑马图：</p>
+<p>&nbsp;</p>
+<table width="310" height="140" border="1" id="firsttest">
+  <tr>
+    <td>测试</td>
+    <td>&nbsp;</td>
+    <td>测试</td>
+    <td>&nbsp;</td>
+    <td>测试</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>测试</td>
+    <td>测试</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>测试</td>
+  </tr>
+  <tr>
+    <td>测试</td>
+    <td>测试</td>
+    <td>测试</td>
+    <td>测试</td>
+    <td>测试</td>
+  </tr>
+  <tr>
+    <td>测试</td>
+    <td>测试</td>
+    <td>测试</td>
+    <td>测试</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<p>我们只需要一行：</p>
+<p>$(&quot;table tr:nth-child(even) &quot;).css(&quot;background-color&quot;,&quot;aqua&quot;);‘</p>
+<p>偶数行的背景颜色就被替换了，如果想使用更复杂的CSS，我们还可以增加一个Class，比如：</p>
+<p>$(&quot;table tr:nth-child(even) &quot;).addClass(&quot;test&quot;);</p>
+<p>这样我们就可以对于class为test的元素使用CSS规则了。</p>
+<p>在比如我想让这个测试的table淡出隐藏，那就更简单了：</p>
+<p>&nbsp;</p>
+<p>
+  <script type="text/javascript">
+	$("table tr:nth-child(even) ").css("background-color","aqua");
+    function fadeout()
+    {
+    	$("#firsttest").fadeOut();
+    }
+	function fadein()
+    {
+    	$("#firsttest").fadeIn();
+    }
+	function count()
+	{
+		i=$("a").size();
+		alert(i);
+	}
+	
+  </script>
+  <button onclick="fadeout()";>Test</button>
+  <button onclick="fadein()";>Test</button>
+</p>
+<p>&nbsp;</p>
+<p>我们仅仅使用了两行代码：</p>
+<blockquote>
+  <blockquote>
+    <p><br />
+      $(&quot;#firsttest&quot;).fadeOut();<br />
+      $(&quot;#firsttest&quot;).fadeIn();</p>
+    <p> 	 <br />
+      &lt;button onclick=&quot;fadeout()&quot;;&gt;Test&lt;/button&gt;<br />
+      &lt;button onclick=&quot;fadein()&quot;;&gt;Test&lt;/button&gt;</p>
+  </blockquote>
+  </blockquote>
+<p>&nbsp;</p>
+<p>就完成了要克服一系列浏览器兼容性，而且还要手工写很多脚本的问题的解决。</p>
+<p>当然还有更多，我们会在后面稍微详细的讲解。</p>
+<p>&nbsp;</p>
+
+ <h3>如何使用jQuery</h3>
+ 
+ <p>&nbsp;</p>
+ <p>很简单，只要在head标签中加入：</p>
+ <p>&lt;script src=&quot;js/jquery.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</p>
+ <p>这样的引用就可以了。</p>
+<p>&nbsp;    </p>
+</div>
+<div id="chapter1">
+  <h1>选择器</h1>
+  <p>&nbsp;</p>
+  <h3>我们之前是怎么做的</h3>
+  <p>&nbsp;</p>
+  <blockquote>
+    <p>ol, ul </p>
+    <p>p#ljsabc a</p>
+    <p>a:hover</p>
+    <p>还有……</p>
+  </blockquote>
+  <p>&nbsp;</p>
+  <h3>我们可以怎么做？</h3>
+  <p>&nbsp;</p>
+  <blockquote>
+    <p>li:nth-child(2n)</p>
+    <p>a:nth-child(even)</p>
+    <p>&nbsp;</p>
+    <p>p &gt; a （必须是直系儿子才有效</p>
+    <p>ul.mylist &gt;li &gt;a</p>
+    <p>&nbsp;</p>
+    <p>a[href^=http://] （以特定值开头</p>
+    <p>a[href$=.txt]   （以特定值结尾</p>
+    <p>&nbsp;</p>
+    <p>li:has(a)</p>
+    <p>div:has(img)</p>
+  </blockquote>
+  <p>&nbsp;</p>
+  <h3>自定义选择器</h3>
+  <p>&nbsp;</p>
+  <blockquote>
+    <p>div p:not(:hidden)</p>
+    <p>input(:checked)</p>
+    <p>&nbsp;</p>
+    <p>div.children().not(p.list)</p>
+  </blockquote>
+  <p>到最后我们可以写很长的一串选择器链</p>
+  <p>&nbsp;</p>
+  <h3>管理这些元素</h3>
+  <p>&nbsp;</p>
+  <blockquote>
+  	<button onclick='count();'>test</button>
+    <p>$(&quot;#somediv&quot;).append(&quot;There are&quot;+$(&quot;a&quot;).size();+&quot;links&quot;);</p>
+    <p>div.children().not(p.list)</p>
+    <p>ul&gt;li:has(a).slice(2,3);</p>
+  </blockquote>
+  <p>&nbsp;</p>
+  <p>还有更多的用法，大家可以去网站上查看API手册。</p>
+  <p>这里暂且用实例的方式告诉大家，jQuery的选择器有多强大。</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+</div>
+<div id="chapter2">
+  <h1>DOM</h1>
+  <p>&nbsp;</p>
+  <h3>获得一个元素的属性</h3>
+  
+  <p>&nbsp;</p>
+  <p>比如我们想获得logo元素的src属性：</p>
+  <p>alert($(&quot;#logo&quot;).attr(&quot;src&quot;)); </p>
+  <p>即可</p>
+	<button onclick='alert($("#logo").attr("height"));'>test</button>
+  <p>&nbsp;</p>
+  <p>如果我们不满足的话，还可以使用另一的attr的使用方式进行修改操作，比如：</p>
+  <p>$(&quot;#logo&quot;).attr(&quot;src&quot;,&quot;img/logo2.png&quot;);</p>
+  <p>即可</p>
+  <button onclick='$("#logo").attr("src","img/logo2.jpg");'>test</button>
+  <p>&nbsp;</p>
+  <p>另外还有额外的removeAttr等等函数。</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <h3>修改一个元素的样式</h3>
+  <p>&nbsp;</p>
+  <p>比如最简单的操作，刚才替换的Logo大小不太合适，我们可以修改一下：</p>
+  <p> $(&quot;#logo&quot;).width(160);</p>
+  <p>$(&quot;#logo&quot;).height(70);</p>
+  <script type="text/javascript">
+	function changesize()
+	{
+		$("#logo").width(160);
+		$("#logo").height(70);
+	}
+  </script>
+  <button onclick='changesize();'>test</button>
+  <p>&nbsp;</p>
+  <p>自然的，这两个函数如果不加参数就使用的话：</p>
+  <p>比如alert($(&quot;#logo&quot;).height());</p>
+  <button onclick='alert($("#logo").height());'>test</button>
+  <p>&nbsp;</p>
+  <p>接下来尝试更高级的控制方式：</p>
+  <p>我们想完整的控制一个元素的CSS，比如下面一个小方块的背景图片：</p>
+  <p>left+=5;<br />
+$(&quot;#cssbox&quot;).css(&quot;background-position&quot;,left+'px 0px'); </p>
+  <script type="text/javascript">
+  	var left=0;
+	function fly()
+	{
+		left+=5;
+		$("#cssbox").css("background-position",left+'px 0px');          
+	}
+  </script>
+  <button onclick='fly()'>test</button>
+  <div id="cssbox">
+  I am ljsabc
+  </div>
+  <p>&nbsp;</p>
+  <p>还有一种方法，就是我们刚才提到了AddClass函数，通过使用这个函数添加一个类，然后再执行CSS规则。</p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <h3>修改一个元素的内容</h3>
+  <p>&nbsp;</p>
+  <p>最简单的，我们想替换上一个div中的文字，那么只需要这样：</p>
+  <p>$(&quot;#cssbox&quot;).html(&quot;Hello World!&quot;);</p>
+  <button onclick='$("#cssbox").html("Hello World!");'>test</button>
+  <p>&nbsp;</p>
+  <p>如果我们想追加元素到这个div中，比如：</p>
+  <p>$(&quot;#cssbox&quot;).append(&quot;Hello World!&quot;);</p>
+  <button onclick='$("#cssbox").append("Hello World!");'>test</button>
+  <p>&nbsp;</p>
+  <p>当然我们也可以插入一个对象，比如：</p>
+  <p>$(&quot;#cssbox&quot;).append($(&quot;#firsttest&quot;));</p>
+  <button onclick='$("#cssbox").append($("#firsttest"));'>test</button>
+  <p>&nbsp;</p>
+  <p>当然还有一些更好的方法，在此由于时间有限，就不再赘述了。</p>
+  <p>&nbsp;</p>
+</div>
+<div id="chapter3">
+<h1>
+<h1>
+<h1>事件 </h1>
+<h1>
+</h1>
+<p>&nbsp;</p>
+<h3>jQuery事件模型</h3>
+<p>&nbsp;</p>
+<p>我不准备在这里讲什么JS的第0级，第1级和第2级事件模型，如果你真想知道，我也不知道。这种情况，还是上w3.org比较靠谱。</p>
+<p>这里只有两个函数，不过可以抵挡千军万马。</p>
+<p>&nbsp;</p>
+<h3>$.bind()</h3>
+<p>用法：bind(eventType,data,Listener)</p>
+<script type="text/javascript">
+
+	function advanimate()
+	{
+		$("#leftbar").animate({
+		opacity:0.5,
+		left:900,
+		'font-size':30+'px'
+		},5000);
+	}
+	function fde()
+	{
+			$("#logo").fadeOut();
+	}
+	function go()
+	{
+		$('#logo').bind('click',function(event){fde()});
+	}
+  </script>
+<p>eventType为事件名称，data为提供的数据（不过很少用到），Listener为事件处理程序，例如：</p>
+<p>$('#logo').bind('click',function(event){fde()});</p>
+<button onclick='go();'>test</button>
+<p>&nbsp;</p>
+<p>我们可以使用的事件名称有很多，比如click，比如blur，比如focus，比如onmousemove，等等。这个由于学习HTML的时候就学习过了，不再列举了。</p>
+<p>Event这个参数，有着很多属性，列举一下：</p>
+<p>altkey,ctrlKey,KeyCode,metKey,pageX,pageY,RelatedTarget,ScreenX,screenY,shiftKey,target,type,which</p>
+<p>&nbsp;</p>
+<h3>$.unbind()</h3>
+<p>&nbsp;</p>
+<p>删除事件处理程序，如果之前建立了一个click处理程序，我们只要：</p>
+<p>$(&quot;#something&quot;).unbind('click');</p>
+<p>即可。</p>
+<p>&nbsp;</p>
+<h3>$.toggle()</h3>
+<p>&nbsp;</p>
+<p>处理一对元素的点击</p>
+<p>例如：</p>
+<p>$(&quot;#logo&quot;).toggle(</p>
+<p>function(event){</p>
+<p>$(event.target).css('opacity','0.4');</p>
+<p>},</p>
+<p>function(event){</p>
+<p>$(event.target).css('opacity','1.0');</p>
+<p>});</p>
+<script type="text/javascript">
+function tog()
+{
+	$("#logo").toggle(
+		function(event){
+		$(event.target).css('opacity','0.4');
+		alert(event.ctrlKey);
+		},
+		function(event){
+		$(event.target).css('opacity','1.0');
+	});
+}
+</script>
+ <button onclick='tog()'>test</button>
+ <p>&nbsp;</p>
+ <p>&nbsp;</p>
+</div>
+<div id="chapter4">
+  <h1>动画</h1>
+  <p>&nbsp;</p>
+  <h3>显示或者隐藏一个元素</h3>
+  
+  <p>&nbsp;</p>
+  <p>我们只是想隐藏一个logo，如果我们只是让一个元素消失，那么这样就好了：</p>
+  <p>$(&quot;#logo&quot;).hide();</p>
+  <button onclick='$("#logo").hide();'>test</button>
+  <p>&nbsp;</p>
+  <p>再让它显示：</p>
+  <p>$(&quot;#logo&quot;).show();</p>
+  <button onclick='$("#logo").show();'>test</button>
+  <p>&nbsp;</p>
+  <p>如果我们加上个延时呢：</p>
+  <p>$(&quot;#logo&quot;).hide(1500);</p>
+  <button onclick='$("#logo").hide(1500);'>test</button>
+  <p>&nbsp;</p>
+  <p>再让它显示：</p>
+  <p>$(&quot;#logo&quot;).show(1500);</p>
+  <button onclick='$("#logo").show(1500);'>test</button>
+  <p>&nbsp;</p>
+  
+  <p>如果我们需要切换显示隐藏怎么办？</p>
+  <p>$(&quot;#logo&quot;).toggle(1500);</p>
+  <button onclick='$("#logo").toggle(1500);'>test</button>
+  <p>&nbsp;</p>
+  
+  <h3>回传函数</h3>
+  <p>&nbsp;</p>
+  <p>上面这些函数都是只有一个参数（时间），或者没有参数，</p>
+  <p>我们可以为这些函数增加第二个参数，叫做Callback。</p>
+  <p>它的意思是，当动画结束之后，会执行什么命令。</p>
+  <p>&nbsp;</p>
+  <p>例如：</p>
+  <p>$(&quot;#logo&quot;).toggle(1500,'alert(0)');</p>
+  <button onclick="$('#logo').toggle(1500,alert('finished'))">test</button>
+  
+  <p>&nbsp;</p>
+  <h3>其他动画</h3>
+  <p>&nbsp;</p>
+  <p>比如向上卷动</p>
+  <p>$(&quot;#leftbar&quot;).slideUp(1500);</p>
+  <button onclick="$('#leftbar').slideUp(1500)">test</button>
+  <p>&nbsp;</p>
+  <p>比如向下卷动</p>
+  <p>$(&quot;#leftbar&quot;).slideDown(1500);</p>
+  <button onclick="$('#leftbar').slideDown(1500)">test</button>
+  <p>&nbsp;</p>
+  <p>淡入淡出，其中第一个参数是消散时间，第二个参数是透明度，第三个参数是回传函数，</p>
+  <p>例如：  $(&quot;#leftbar&quot;).fadeTo(1500,0.2);</p>
+  <button onclick="$('#leftbar').fadeTo(1500,0.2);">test</button>
+  <p>&nbsp;</p>
+  <p>例如：  $(&quot;#leftbar&quot;).fadeTo(1500,1.0);</p>
+  <button onclick="$('#leftbar').fadeTo(500,1.0);">test</button>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  
+  <h3>自定义高级动画</h3>
+  <p>jQuery的内置函数已经提供了一系列很强力的动画函数，如果还不满足的话，还可以对更多的CSS属性施以动画，例如： </p>
+  <p> $(&quot;#leftbar&quot;).animate({</p>
+  <p>	opacity:0.5;</p>
+  <p>left:1200;</p>
+  <p>font-size:30px;</p>
+  <p>},5000);</p>
+  <button onclick="advanimate()">test</button>
+  <p>&nbsp;</p>
+  <p>这些渐变效果基本上是基于大小和位置的，如果想对颜色进行渐变操作的话，可以使用一个Color Animation Plugin进行扩展。</p>
+  <p>&nbsp;</p>
+</div>
+<div id="chapter5">
+  <h1>Ajax</h1>
+  <p>&nbsp;</p>
+  <h3>什么是Ajax</h3>
+  <p>Ajax就是所谓异步的Javascript和XML（Asynchronous Javascript and XML），一种无需刷新就可以和服务器进行交互的方式。</p>
+  <p>我们首先要了解一下同步和异步的概念。</p>
+  <p>同步：上完厕所要洗手，当然不能同时做。在上厕所时，你是阻塞的。也就是这件事做不完，下一件事是不能昨晚的。</p>
+  <p>异步：我可以一边煮着饭，一边炒菜。这是自然的。</p>
+  <p>&nbsp;</p>
+  <p>如果说只有向服务器提交页面然后刷新才能提交的话，就像是前者。不刷新无法完成登陆（或者其他步骤），如果我想不刷新就登陆的话，可以这样：</p>
+  <p>我给服务器打一个电话，说我是李喵喵，我的密码是****，我要登陆。</p>
+  <p>然后我做一些其他的事情，但是记得等服务器的电话。</p>
+  <p>过一会儿服务器回电话，告诉我，登陆成功了，你的凭据是“信春哥不挂科”（假定），只要说这句话，就可以做你喜欢的事情了。</p>
+  <p>然而我并没有离开家门。</p>
+  <p>&nbsp;</p>
+  <p>如果我采取同步的方式，那就没有电话的存在了。我必须要走到服务器所在的地方，然后手工把我的用户名密码告诉它才可以。</p>
+  <p>说了这么多就是为了了解Ajax的工作原理。</p>
+  <h3>&nbsp;</h3>
+  <h3>如何实现？</h3>
+  <p><del>我们需要一个对象，叫做XMLHTTPRequest……</del></p>
+  <p>说实话用纯JS实现XHR请求是痛苦的，因为要创建一个互不兼容的对象，然后在这个对象的基础上进行操作，实在恼人。</p>
+  <p>那么，用jQuery就能很快的实现了？是的，比如：</p>
+  <p> $(&quot;ajaxbox&quot;).load(&quot;lib/getquery.php?id=2&quot;);</p>
+  <script type="text/javascript">
+	function ajaxload()
+	{
+		$("#ajaxbox").load("lib/getquery.php?id=2");
+	}
+	</script>
+   <button onclick="ajaxload();">test</button>
+   <button onclick='$("#ajaxbox").html("");'>Clear</button>
+  <div id="ajaxbox">
+  </div>
+  <p>&nbsp;</p>
+  <p>仅仅使用了1行，就将一个外部的PHP页面送入了HTML中。</p>
+  <p>设想一下，我有个twitterupdates.php是提供最近的推文的，那么只需一个load函数，就能做出一个“我最近的推文”的功能。</p>
+  <p>&nbsp;</p>
+  <p>那么更高级的使用呢？</p>
+  <p>&nbsp;</p>
+  <h3>$.get和$.post</h3>
+  <p>&nbsp;</p>
+  <p>一眼就应该能明白，这分别是提供get请求和post请求的。</p>
+  <p>比如</p>
+  <p>jQuery.post(&quot;http://localhost/shuo/lib/addquery.php&quot;,{id:lastid+1,updates:shout},&quot;text&quot;,function(result){<br />
+alert(result);<br />
+});</p>
+  <p>这是干什么的？</p>
+  <p>&nbsp;</p>
+  <p>GET请求与之类似，没有任何区别。</p>
+  <p>&nbsp;</p>
+  <h3>JSON</h3>
+  <p>&nbsp;</p>
+  <p>JSON是什么，请参见Wikipedia。（因为我忘了）</p>
+  <p>为什么使用JSON，主要是XML太复杂了。</p>
+  <p>那么我们用JSON干什么？还记得之前load的那个内容吗？我们该如何处理之？</p>
+  <p>success: function(json){<br />
+alert(json[0].updates);<br />
+document.getElementById(&quot;shoutbox&quot;).value=json[0].updates;<br />
+}</p>
+  <p>&nbsp;</p>
+  <h3>完全控制Ajax：$.ajax</h3>
+  <p>&nbsp;</p>
+  <p>我们会发现一个Ajax请求可能会有更多的参数，比如对象类型，超时，甚至是404的处理方案，这个时候我们就需要$.ajax函数了，比如：</p>
+  <blockquote>
+    <p>jQuery.ajax({ <br />
+      type: &quot;get&quot;,<br />
+      url: &quot;http://localhost/shuo/lib/getid.php&quot;,<br />
+      dataType: 'text',<br />
+      async: false,<br />
+      contentType: 'application/json; charset=utf8',<br />
+      success: function(text){<br />
+      lastid=Number(text);<br />
+      alert(lastid);<br />
+      }<br />
+      });</p>
+  </blockquote>
+<p>再比如：</p>
+<blockquote>
+  <p>$.ajax({<br />
+    type:'POST',<br />
+    url:&quot;http://localhost/shuo/lib/addquery.php&quot;,<br />
+    data:{id:lastid+1,updates:shout},<br />
+    success:function(data){<br />
+    alert(data);<br />
+    getid()<br />
+    }<br />
+    });</p>
+  </blockquote>
+<p>&nbsp;</p>
+<p>还有更多的地方可以使用Ajax，何不多多尝试呢？</p>
+<p>但是请注意串行和并行的问题，如果在短时间有两个线程对一个数据进行操作，那么很容易出现冲突（有点像操作系统一样，解决的办法就是阻塞一个线程）。</p>
+<p>&nbsp;</p>
+</div>
+</div>
+
+</div>
+</body>
+</html>
